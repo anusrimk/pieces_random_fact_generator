@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Facts Generator</title>
+    <title>Code Generator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -60,9 +60,9 @@
 </head>
 <body>
     <div class="container">
-        <h1>Random Facts Generator</h1>
-        <div id="factDisplay">Click the button to generate a random fact!</div>
-        <button onclick="generateFact()">Generate Fact</button>
+        <h1>Code Generator</h1>
+        <div id="factDisplay">Click the button to start generating facts!</div>
+        <button onclick="startGenerating()" id="generateButton">Start Generating</button>
     </div>
 
     <script>
@@ -78,6 +78,22 @@
             "Bananas are berries, but strawberries aren't.",
             "A day on Mars is only 37 minutes longer than a day on Earth."
         ];
+
+        let isGenerating = false;
+        let intervalId;
+
+        function startGenerating() {
+            const button = document.getElementById('generateButton');
+            if (!isGenerating) {
+                isGenerating = true;
+                button.textContent = 'Stop Generating';
+                intervalId = setInterval(generateFact, 2000); // Generate fact every 2 seconds
+            } else {
+                isGenerating = false;
+                button.textContent = 'Start Generating';
+                clearInterval(intervalId);
+            }
+        }
 
         function generateFact() {
             const factDisplay = document.getElementById('factDisplay');
