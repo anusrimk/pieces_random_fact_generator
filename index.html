@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Generator</title>
+    <title>Fact Generator with Categories</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -56,50 +56,76 @@
         button:hover {
             background-color: #45a049;
         }
+
+        .fact-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+
+        select {
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Code Generator</h1>
-        <div id="factDisplay">Click the button to start generating facts!</div>
-        <button onclick="startGenerating()" id="generateButton">Start Generating</button>
+        <h1>Fact Generator with Categories</h1>
+        <select id="categorySelect">
+            <option value="all">All Categories</option>
+            <option value="history">History</option>
+            <option value="science">Science</option>
+            <option value="nature">Nature</option>
+        </select>
+        <div id="factDisplay">Click the button to generate a random fact!</div>
+        <button onclick="generateFact()">Generate Fact</button>
+        <div id="factCardsContainer"></div>
     </div>
 
     <script>
         const facts = [
-            "Honey never spoils. Archaeologists have found pots of honey in ancient Egyptian tombs that are over 3,000 years old.",
-            "A day on Venus is longer than its year. It takes Venus 243 Earth days to rotate on its axis but only 225 Earth days to orbit the Sun.",
-            "The shortest war in history was between Britain and Zanzibar on August 27, 1896. Zanzibar surrendered after just 38 minutes.",
-            "The first oranges weren't orange. The original oranges from Southeast Asia were actually green.",
-            "A group of flamingos is called a 'flamboyance'.",
-            "Cows have best friends and get stressed when separated from them.",
-            "The average person spends 6 months of their lifetime waiting for red lights to turn green.",
-            "The first person convicted of speeding was going 8 mph.",
-            "Bananas are berries, but strawberries aren't.",
-            "A day on Mars is only 37 minutes longer than a day on Earth."
+            { text: "Honey never spoils. Archaeologists have found pots of honey in ancient Egyptian tombs that are over 3,000 years old.", category: "history" },
+            { text: "A day on Venus is longer than its year. It takes Venus 243 Earth days to rotate on its axis but only 225 Earth days to orbit the Sun.", category: "science" },
+            { text: "The shortest war in history was between Britain and Zanzibar on August 27, 1896. Zanzibar surrendered after just 38 minutes.", category: "history" },
+            { text: "The first oranges weren't orange. The original oranges from Southeast Asia were actually green.", category: "nature" },
+            { text: "A group of flamingos is called a 'flamboyance'.", category: "nature" },
+            { text: "Cows have best friends and get stressed when separated from them.", category: "nature" },
+            { text: "The average person spends 6 months of their lifetime waiting for red lights to turn green.", category: "science" },
+            { text: "The first person convicted of speeding was going 8 mph.", category: "history" },
+            { text: "Bananas are berries, but strawberries aren't.", category: "nature" },
+            { text: "A day on Mars is only 37 minutes longer than a day on Earth.", category: "science" }
         ];
 
-        let isGenerating = false;
-        let intervalId;
-
-        function startGenerating() {
-            const button = document.getElementById('generateButton');
-            if (!isGenerating) {
-                isGenerating = true;
-                button.textContent = 'Stop Generating';
-                intervalId = setInterval(generateFact, 2000); // Generate fact every 2 seconds
-            } else {
-                isGenerating = false;
-                button.textContent = 'Start Generating';
-                clearInterval(intervalId);
-            }
-        }
-
         function generateFact() {
-            const factDisplay = document.getElementById('factDisplay');
             const randomIndex = Math.floor(Math.random() * facts.length);
-            factDisplay.textContent = facts[randomIndex];
+            const fact = facts[randomIndex];
+            const factCard = document.createElement('div');
+            factCard.className = 'fact-card';
+            factCard.textContent = fact.text;
+            factCard.dataset.category = fact.category;
+
+            const factCardsContainer = document.getElementById('factCardsContainer');
+            factCardsContainer.appendChild(factCard);
         }
+
+        document.getElementById('categorySelect').addEventListener('change', function() {
+            const selectedCategory = this.value;
+            const factCards = document.querySelectorAll('.fact-card');
+            factCards.forEach(card => {
+                if (selectedCategory === 'all' || card.dataset.category === selectedCategory) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
     </script>
 </body>
 </html>
